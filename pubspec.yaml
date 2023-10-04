@@ -1,0 +1,30 @@
+name: ledger_gui
+description: A Ledger CLI gui
+publish_to: 'none'
+
+version: 0.2.1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  file_picker: 5.2.5
+  provider: ^6.0.5
+  shimmer: ^3.0.0
+
+  ledger_cli: ^0.2.1
+    #path: ../ledger-cli-dart
+  ledger_cli_flutter: ^0.2.1
+    #path: ../ledger-cli-flutter
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
