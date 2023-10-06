@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 
 import '../model/model.dart';
@@ -23,16 +24,22 @@ class AppController  {
 
   final model = AppModel();
 
-  Future<void> loadPreferences(String path) async {
+  Future<void> loadPreferences(String pathOrData) async {
     model.guiInitState.value = GuiInitState.loadingPreferences;
     try {
-      final preferences = await ledgerPreferencesLoader.loadFromPath(path);
+      final preferences = kIsWeb ? await ledgerPreferencesLoader.loadFromStringData(pathOrData) : await ledgerPreferencesLoader.loadFromPath(pathOrData);
       model.ledgerPreferences = preferences;
-      model.ledgerSource.value = LedgerSource.forFile(preferences.defaultLedgerFile);
+      if (kIsWeb) {
+        model.guiInitState.value = GuiInitState.hasNoLedger;
+      }
+      else {
+        model.ledgerSource.value =
+            LedgerSource.forFile(preferences.defaultLedgerFile);
+      }
     }
     catch (exc, stackTrace) {
       addError(UserFacingError(message: 'Error loading ledger preferences: $exc', stackTrace: stackTrace), propagateToGui: true);
-      model.guiInitState.value = GuiInitState.hasNoLedger;
+      model.guiInitState.value = GuiInitState.hasNoPreferences;
     }
   }
 

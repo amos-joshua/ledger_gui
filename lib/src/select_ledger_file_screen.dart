@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'dialogs/dialogs.dart';
 import 'model/model.dart';
 
-class SelectAFileScreen extends StatelessWidget {
-  const SelectAFileScreen({super.key});
+class SelectLedgerFileScreen extends StatelessWidget {
+  const SelectLedgerFileScreen({super.key});
 
   void onSelectFileTapped(BuildContext context) {
     final preferences = context.read<AppModel>().ledgerPreferences;

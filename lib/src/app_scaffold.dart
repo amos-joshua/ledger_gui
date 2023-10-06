@@ -15,6 +15,7 @@ import 'ledger_loading_view.dart';
 import 'app_tab_view.dart';
 import 'model/model.dart';
 import 'errors_list_view.dart';
+import 'settings_screen.dart';
 
 class TabBarContainer extends StatelessWidget implements PreferredSizeWidget {
   final Widget child;
@@ -100,6 +101,14 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImportScreen(importSession: importSession, ledgerPreferences: model.ledgerPreferences)));
                 });
               }
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Preferences',
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen(ledgerPreferences:model.ledgerPreferences)));
+
+            },
           ),
         ],
       ),

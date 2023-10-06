@@ -1,4 +1,4 @@
 
 enum GuiInitState {
-  loadingPreferences, loadingLedger, hasNoLedger, ledgerLoaded
+  loadingPreferences, loadingLedger, hasNoPreferences, hasNoLedger, ledgerLoaded
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ledger_gui/src/select_a_file_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 import 'controller/app_controller.dart';
+import 'select_ledger_file_screen.dart';
+import 'select_preferences_file_screen.dart';
 import 'model/model.dart';
 import 'shimmer_list.dart';
 
@@ -26,7 +27,7 @@ class _State extends State<LedgerLoadingView> {
     appController = context.read<AppController>();
     appController.model.ledgerSource.addListener(loadLedger);
     if (kIsWeb) {
-      appController.model.guiInitState.value = GuiInitState.hasNoLedger;
+      appController.model.guiInitState.value = GuiInitState.hasNoPreferences;
     }
     else {
       appController.loadPreferences(widget.preferencesPath);
@@ -51,8 +52,10 @@ class _State extends State<LedgerLoadingView> {
     final guiState = context.watch<GuiInitStateAttr>().value;
     final loading = (guiState == GuiInitState.loadingPreferences) || (guiState == GuiInitState.loadingLedger);
     final hasNoLedger = guiState == GuiInitState.hasNoLedger;
+    final hasNoPreferences = guiState == GuiInitState.hasNoPreferences;
     if (loading) return const ShimmerList();
-    if (hasNoLedger) return const SelectAFileScreen();
+    if (hasNoLedger) return const SelectLedgerFileScreen();
+    if (hasNoPreferences) return const SelectPreferencesFileScreen();
     return widget.child;
   }
 }
