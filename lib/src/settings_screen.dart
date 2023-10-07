@@ -1,12 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:ledger_gui/src/model/attributes.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 import 'dialogs/dialogs.dart';
 import 'controller/app_controller.dart';
-import 'import_starter.dart';
 
 class SettingsScreen extends StatefulWidget {
   final AppController appController;

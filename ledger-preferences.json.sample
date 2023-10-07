@@ -17,4 +17,18 @@
       "defaultDestinationAccount": "Expenses:work"
     }
   ]
+  "csvFormats": [
+    {
+      "name": "Format1",
+      "dateColumnIndex": 0,
+      "descriptionColumnIndex": 3,
+      "amountColumnIndex": 4,
+      "dateFormat": "dd/mm/y",
+      "numberFormat": "###,##",
+      "locale": "en_US",
+      "lineSkip": 1,
+      "valueSeparator": ";",
+      "quoteCharacter": ""
+    }
+  ]
 }

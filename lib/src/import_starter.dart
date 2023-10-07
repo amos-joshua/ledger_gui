@@ -24,6 +24,7 @@ class ImportStarter {
         return importSession.loadCsvLines(csvLines, importAccount: importAccount).then((placeholder) => importSession);
       }).catchError((err, stackTrace) {
         ErrorDialog(context).show('Oops', 'Could not import file: $err\n\n$stackTrace');
+        return null;
       });
     });
   }
