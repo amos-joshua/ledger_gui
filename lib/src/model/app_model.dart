@@ -6,7 +6,7 @@ import 'gui_init_state.dart';
 
 class AppModel {
   final guiInitState = GuiInitStateAttr(GuiInitState.loadingPreferences);
-  var ledgerPreferences = LedgerPreferences.empty;
+  var preferences = PreferencesAttr(LedgerPreferences.empty);
 
   var ledgerSource = LedgerSourceAttr(null);
   var ledger = Ledger();

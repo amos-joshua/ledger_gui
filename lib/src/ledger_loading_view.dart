@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ledger_cli/ledger_cli.dart';
@@ -10,8 +9,7 @@ import 'shimmer_list.dart';
 
 class LedgerLoadingView extends StatefulWidget {
   final Widget child;
-  final String preferencesPath;
-  const LedgerLoadingView({required this.child, required this.preferencesPath, super.key});
+  const LedgerLoadingView({required this.child, super.key});
 
   @override
   State createState() => _State();
@@ -21,17 +19,13 @@ class _State extends State<LedgerLoadingView> {
   late final AppController appController;
   LedgerSource? lastLoadedSource;
 
+
   @override
   void initState() {
     super.initState();
     appController = context.read<AppController>();
     appController.model.ledgerSource.addListener(loadLedger);
-    if (kIsWeb) {
-      appController.model.guiInitState.value = GuiInitState.hasNoPreferences;
-    }
-    else {
-      appController.loadPreferences(widget.preferencesPath);
-    }
+    appController.tryLoadStoredPreferences();
   }
 
   @override

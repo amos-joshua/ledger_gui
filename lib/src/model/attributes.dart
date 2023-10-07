@@ -25,3 +25,7 @@ class SelectedTabIndexAttr extends ValueNotifier<int> {
 class GuiInitStateAttr extends ValueNotifier<GuiInitState> {
   GuiInitStateAttr(super.value);
 }
+
+class PreferencesAttr extends ValueNotifier<LedgerPreferences> {
+  PreferencesAttr(super.value);
+}

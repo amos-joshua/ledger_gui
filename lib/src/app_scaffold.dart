@@ -30,8 +30,7 @@ class TabBarContainer extends StatelessWidget implements PreferredSizeWidget {
 
 
 class AppScaffold extends StatefulWidget {
-  final String preferencesPath;
-  const AppScaffold({super.key, required this.preferencesPath});
+  const AppScaffold({super.key});
 
   @override
   State createState() => _State();
@@ -54,10 +53,17 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    errorStreamSubscription?.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final model = context.read<AppModel>();
     final ledgerSource = context.watch<LedgerSourceAttr>();
     final tabQueries = context.watch<QueryList>();
+    final preferences = model.preferences.value;
 
     final tabController = TabController(
         length: 1 + tabQueries.length,
@@ -81,7 +87,7 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
             icon: const Icon(Icons.folder),
             tooltip: 'Open',
             onPressed: () {
-              final initialDirectory = kIsWeb ? null : File(model.ledgerPreferences.defaultLedgerFile).parent.path;
+              final initialDirectory = kIsWeb ? null : File(preferences.defaultLedgerFile).parent.path;
               SelectLedgerFileDialog(context).show(initialDirectory: initialDirectory).then((source) {
                 if (source != null) ledgerSource.value = source;
               });
@@ -94,11 +100,11 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
                 final importStarter = ImportStarter();
                 importStarter.startImport(
                     context,
-                    ledgerPreferences: model.ledgerPreferences,
+                    ledgerPreferences: preferences,
                     accountManager: model.ledger.accountManager
                 ).then((importSession) {
                   if (importSession == null) return;
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImportScreen(importSession: importSession, ledgerPreferences: model.ledgerPreferences)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImportScreen(importSession: importSession, ledgerPreferences: preferences)));
                 });
               }
           ),
@@ -106,14 +112,13 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
             icon: const Icon(Icons.settings),
             tooltip: 'Preferences',
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen(ledgerPreferences:model.ledgerPreferences)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsScreen(appController: appController)));
 
             },
           ),
         ],
       ),
       body: LedgerLoadingView(
-        preferencesPath: widget.preferencesPath,
         child: AppTabView(tabController: tabController),
       ),
     );

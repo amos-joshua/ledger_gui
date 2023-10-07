@@ -13,6 +13,7 @@ dependencies:
   file_picker: 5.2.5
   provider: ^6.0.5
   shimmer: ^3.0.0
+  shared_preferences: ^2.2.1
 
   ledger_cli: ^0.2.1
     #path: ../ledger-cli-dart

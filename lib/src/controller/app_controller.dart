@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:ledger_cli/ledger_cli.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../model/model.dart';
 
 class AppController  {
+  static const PREFERENCES_STORAGE_KEY = "LEDGER_PREFERENCES";
   static const ledgerPreferencesLoader = LedgerPreferencesLoader();
   static const ledgerLoader = LedgerLoader();
   late final ledgerSourceWatcher = LedgerSourceWatcher(
@@ -24,17 +25,34 @@ class AppController  {
 
   final model = AppModel();
 
-  Future<void> loadPreferences(String pathOrData) async {
+  void tryLoadStoredPreferences() async {
+    final storage = await SharedPreferences.getInstance();
+    final data = storage.getString(PREFERENCES_STORAGE_KEY);
+    if (data != null) {
+      await loadPreferences(data);
+    }
+    else {
+      model.guiInitState.value = GuiInitState.hasNoPreferences;
+    }
+  }
+
+  void forgetPreferences() async {
+    model.preferences.value = LedgerPreferences.empty;
+    final storage = await SharedPreferences.getInstance();
+    storage.remove(PREFERENCES_STORAGE_KEY);
+    model.ledgerSource.value = null;
+    model.guiInitState.value = GuiInitState.hasNoPreferences;
+  }
+
+  Future<void> loadPreferences(String data) async {
     model.guiInitState.value = GuiInitState.loadingPreferences;
     try {
-      final preferences = kIsWeb ? await ledgerPreferencesLoader.loadFromStringData(pathOrData) : await ledgerPreferencesLoader.loadFromPath(pathOrData);
-      model.ledgerPreferences = preferences;
-      if (kIsWeb) {
-        model.guiInitState.value = GuiInitState.hasNoLedger;
-      }
-      else {
+      final storage = await SharedPreferences.getInstance();
+      storage.setString(PREFERENCES_STORAGE_KEY, data);
+      model.preferences.value = await ledgerPreferencesLoader.loadFromStringData(data);
+      if (!kIsWeb && model.preferences.value.defaultLedgerFile.isNotEmpty) {
         model.ledgerSource.value =
-            LedgerSource.forFile(preferences.defaultLedgerFile);
+            LedgerSource.forFile(model.preferences.value.defaultLedgerFile);
       }
     }
     catch (exc, stackTrace) {

@@ -12,9 +12,7 @@ void main() {
       child: MaterialApp(
           title: 'Ledger CLI Explorer',
           theme: ThemeData(primarySwatch: Colors.green),
-          home: const AppScaffold(
-            preferencesPath: 'ledger-preferences.json',
-          )
+          home: const AppScaffold()
       )
     )
   );

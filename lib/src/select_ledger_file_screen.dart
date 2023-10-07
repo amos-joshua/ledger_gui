@@ -10,7 +10,7 @@ class SelectLedgerFileScreen extends StatelessWidget {
   const SelectLedgerFileScreen({super.key});
 
   void onSelectFileTapped(BuildContext context) {
-    final preferences = context.read<AppModel>().ledgerPreferences;
+    final preferences = context.read<AppModel>().preferences.value;
     final ledgerSource = context.read<LedgerSourceAttr>();
     final initialDirectory = kIsWeb ? null : File(preferences.defaultLedgerFile).parent.path;
     SelectLedgerFileDialog(context).show(initialDirectory: initialDirectory).then((source) {

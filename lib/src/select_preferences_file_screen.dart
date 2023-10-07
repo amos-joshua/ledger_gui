@@ -1,4 +1,5 @@
-
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controller/app_controller.dart';
@@ -7,14 +8,12 @@ import 'dialogs/dialogs.dart';
 class SelectPreferencesFileScreen extends StatelessWidget {
   const SelectPreferencesFileScreen({super.key});
 
-  void onSelectFileTapped(BuildContext context) {
+  void onSelectFileTapped(BuildContext context) async {
     final appController = context.read<AppController>();
-
-    SelectPreferencesFileDialog(context).show().then((path) {
-      if (path != null) {
-        appController.loadPreferences(path);
-      }
-    });
+    final pathOrData = await SelectPreferencesFileDialog(context).show();
+    if (pathOrData == null) return;
+    final data = kIsWeb ? pathOrData : await File(pathOrData).readAsString();
+    appController.loadPreferences(data);
   }
 
   @override

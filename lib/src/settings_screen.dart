@@ -1,20 +1,22 @@
 import 'package:flutter/foundation.dart';
+import 'package:ledger_gui/src/model/attributes.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 import 'dialogs/dialogs.dart';
+import 'controller/app_controller.dart';
 import 'import_starter.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final LedgerPreferences ledgerPreferences;
-  const SettingsScreen({required this.ledgerPreferences, super.key});
+  final AppController appController;
+  const SettingsScreen({required this.appController, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<SettingsScreen> {
-  LedgerPreferences get preferences => widget.ledgerPreferences;
 
   String summarize(CsvFormat format) {
     return """dateColumnIndex: ${format.dateColumnIndex}
@@ -28,15 +30,33 @@ valueSeparator: ${format.valueSeparator}
 quoteCharacter: ${format.quoteCharacter}
 """;
   }
+
+  void forgetPreferences() async {
+    final confirm = await ConfirmDialog(context).show(
+      title: 'Forget preferences...',
+      message: 'App will reset to its initial state. Continue?'
+    );
+    if (confirm != true) return;
+    widget.appController.forgetPreferences();
+    Navigator.of(context).pop();
+  }
   
   @override
   Widget build(BuildContext context) {
     final desktopPropertyStyle = kIsWeb ? TextStyle(color: Colors.blueGrey) : null;
     final desktopOnly = kIsWeb ? " (desktop only)" : "";
+    final preferences = widget.appController.model.preferences.value;
 
     return Scaffold(
         appBar: AppBar(
           title: const Text('Preferences'),
+          actions: [
+            IconButton(
+                onPressed: forgetPreferences,
+                icon: Icon(Icons.delete),
+                hoverColor: Colors.red
+            )
+          ],
         ),
         body: ListView(
           shrinkWrap: true,
