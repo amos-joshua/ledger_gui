@@ -2,13 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:ledger_cli/ledger_cli.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../model/model.dart';
+import '../storage/storage.dart';
 
 class AppController  {
   static const PREFERENCES_STORAGE_KEY = "LEDGER_PREFERENCES";
   static const ledgerPreferencesLoader = LedgerPreferencesLoader();
   static const ledgerLoader = LedgerLoader();
+  final storage = PersistentStorage();
+
   late final ledgerSourceWatcher = LedgerSourceWatcher(
     onSourceChanged: (source) => model.ledgerSource.value = source
   );
@@ -26,8 +28,7 @@ class AppController  {
   final model = AppModel();
 
   void tryLoadStoredPreferences() async {
-    final storage = await SharedPreferences.getInstance();
-    final data = storage.getString(PREFERENCES_STORAGE_KEY);
+    final data = await storage.getString(PREFERENCES_STORAGE_KEY);
     if (data != null) {
       await loadPreferences(data);
     }
@@ -38,8 +39,7 @@ class AppController  {
 
   void forgetPreferences() async {
     model.preferences.value = LedgerPreferences.empty;
-    final storage = await SharedPreferences.getInstance();
-    await storage.remove(PREFERENCES_STORAGE_KEY);
+    await storage.clearKey(PREFERENCES_STORAGE_KEY);
     model.ledgerSource.value = null;
     model.guiInitState.value = GuiInitState.hasNoPreferences;
   }
@@ -47,7 +47,6 @@ class AppController  {
   Future<void> loadPreferences(String data) async {
     model.guiInitState.value = GuiInitState.loadingPreferences;
     try {
-      final storage = await SharedPreferences.getInstance();
       await storage.setString(PREFERENCES_STORAGE_KEY, data);
       model.preferences.value = await ledgerPreferencesLoader.loadFromStringData(data);
       if (!kIsWeb && model.preferences.value.defaultLedgerFile.isNotEmpty) {

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 import 'dialogs/dialogs.dart';
 import 'controller/app_controller.dart';
@@ -90,6 +91,22 @@ quoteCharacter: ${format.quoteCharacter}
                 }
               )
               ).toList(growable: false)
+            ),
+            FutureBuilder(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) {
+                String data = 'loading ...';
+                if (snapshot.hasData) {
+                  data = '${snapshot.data?.version}';
+                }
+                else if (snapshot.hasError) {
+                  data = 'Error: ${snapshot.error}';
+                }
+
+                return ListTile(
+                    title: Text('Ledger GUI version: $data')
+                );
+              },
             ),
           ]
         )
