@@ -39,7 +39,7 @@ class AppController  {
   void forgetPreferences() async {
     model.preferences.value = LedgerPreferences.empty;
     final storage = await SharedPreferences.getInstance();
-    storage.remove(PREFERENCES_STORAGE_KEY);
+    await storage.remove(PREFERENCES_STORAGE_KEY);
     model.ledgerSource.value = null;
     model.guiInitState.value = GuiInitState.hasNoPreferences;
   }
@@ -48,11 +48,14 @@ class AppController  {
     model.guiInitState.value = GuiInitState.loadingPreferences;
     try {
       final storage = await SharedPreferences.getInstance();
-      storage.setString(PREFERENCES_STORAGE_KEY, data);
+      await storage.setString(PREFERENCES_STORAGE_KEY, data);
       model.preferences.value = await ledgerPreferencesLoader.loadFromStringData(data);
       if (!kIsWeb && model.preferences.value.defaultLedgerFile.isNotEmpty) {
         model.ledgerSource.value =
             LedgerSource.forFile(model.preferences.value.defaultLedgerFile);
+      }
+      else {
+        model.guiInitState.value = GuiInitState.hasNoLedger;
       }
     }
     catch (exc, stackTrace) {
