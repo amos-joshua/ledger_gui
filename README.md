@@ -44,6 +44,22 @@ The preferences file is a json file containing a hash with the following structu
     - *format*: the name of a CSV format defined in the same preferences file
     - *defaultDestinationAccount*: the (ledger-cli) account to assign to imported transactions for which no destination account is specified, e.g. `Expenses:misc`
 
+## Account matching for imports
+
+Ledger_gui allows automatically matching transactions in csv
+statements to accounts. Matching strings are specified as comma-separated quoted substrings in a comment after the account definition in the ledger file, for example:
+
+```
+account Expenses:restaurants             # "FALAFEL", "PIZZA"
+```
+
+will cause any transactions with `FALAFEL` or `PIZZA` in their
+description to be matched to the `Expenses:restaurants` account (the
+matching is case insensitive).
+
+This is not part of the ledger-cli format, but a custom extension
+implemented by ledger_gui.
+
 ## Running from source
 
     flutter run
