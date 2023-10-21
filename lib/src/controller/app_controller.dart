@@ -92,4 +92,9 @@ class AppController  {
     model.tabQueries.add(newQuery);
     model.selectedTabIndex.value = model.tabQueries.length;
   }
+
+  void addToLedger(Iterable<Entry> newEntries) {
+    model.ledger.entries.addAll(newEntries);
+    model.balancesQuery.value = model.balancesQuery.value;
+  }
 }

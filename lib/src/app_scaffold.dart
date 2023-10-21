@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ledger_cli/ledger_cli.dart';
 import 'package:provider/provider.dart';
 import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 
@@ -96,16 +97,31 @@ class _State extends State<AppScaffold> with TickerProviderStateMixin {
           IconButton(
               icon: const Icon(Icons.move_to_inbox),
               tooltip: 'Import',
-              onPressed: () {
+              onPressed: () async {
                 final importStarter = ImportStarter();
-                importStarter.startImport(
-                    context,
-                    ledgerPreferences: preferences,
-                    accountManager: model.ledger.accountManager
-                ).then((importSession) {
-                  if (importSession == null) return;
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImportScreen(importSession: importSession, ledgerPreferences: preferences)));
-                });
+                late final ImportSession? importSession;
+                try {
+                  importSession = await importStarter.startImport(
+                      context,
+                      ledgerPreferences: preferences,
+                      accountManager: model.ledger.accountManager
+                  );
+                }
+                catch (exc, stackTrace) {
+                  appController.addError(UserFacingError(message: '$exc', stackTrace: stackTrace), propagateToGui: true);
+                  return;
+                }
+                if ((importSession == null) || !context.mounted) return;
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        ImportScreen(
+                          importSession: importSession!,
+                          ledgerPreferences: preferences,
+                          onImportError: (error) => appController.addError(error, propagateToGui: true),
+                          onAddEntriesToLedger: (newEntries) => appController.addToLedger(newEntries),
+                        )
+                  )
+                );
               }
           ),
           IconButton(

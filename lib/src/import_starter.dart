@@ -1,10 +1,11 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 
-import 'dialogs/error_dialog.dart';
 class ImportStarter {
   static const csvDataLoader = CsvDataLoader();
 
@@ -14,17 +15,23 @@ class ImportStarter {
       if (importAccount == null) return Future.value(null);
       return FilePicker.platform.pickFiles(initialDirectory: ledgerPreferences.defaultCsvImportDirectory).then((result) {
         if (result == null) return Future.value(null);
-        if (result.files.isEmpty) return Future.value(null);
-        final importSession = ongoingImportSession ?? ImportSession(accountManager: accountManager);
-        final csvFilePath = result.files.first.path;
-        if (csvFilePath == null) {
-          throw "No file chosen";
+        String pathOrData = "";
+        if (kIsWeb) {
+          final bytes = result.files.single.bytes ?? Uint8List(0);
+          pathOrData = const Utf8Decoder().convert(bytes);
         }
-        final csvLines = csvDataLoader.openStreamFromFile(csvFilePath, csvFormat: importAccount.csvFormat);
+        else {
+          if (result.files.isEmpty) return Future.value(null);
+          final path = result.files.first.path;
+          if (path == null) throw "No file chosen";
+          pathOrData = path;
+        }
+        final importSession = ongoingImportSession ?? ImportSession(accountManager: accountManager);
+        final csvLines = switch(kIsWeb) {
+          false => csvDataLoader.openStreamFromFile(pathOrData, csvFormat: importAccount.csvFormat),
+          true =>  csvDataLoader.openStreamFromStringData(Stream.value(pathOrData), csvFormat: importAccount.csvFormat)
+        };
         return importSession.loadCsvLines(csvLines, importAccount: importAccount).then((placeholder) => importSession);
-      }).catchError((err, stackTrace) {
-        ErrorDialog(context).show('Oops', 'Could not import file: $err\n\n$stackTrace');
-        return null;
       });
     });
   }

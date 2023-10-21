@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ledger_gui/src/model/attributes.dart';
 import 'package:provider/provider.dart';
 import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 import 'entries_list_tab.dart';

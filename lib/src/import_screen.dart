@@ -1,13 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ledger_cli_flutter/ledger_cli_flutter.dart';
 import 'package:ledger_cli/ledger_cli.dart';
 import 'dialogs/dialogs.dart';
 import 'import_starter.dart';
+import 'model/model.dart';
 
 class ImportScreen extends StatefulWidget {
   final ImportSession importSession;
   final LedgerPreferences ledgerPreferences;
-  const ImportScreen({required this.importSession, required this.ledgerPreferences, super.key});
+  final void Function(UserFacingError error) onImportError;
+  final void Function(Iterable<Entry> newEntries) onAddEntriesToLedger;
+  const ImportScreen({required this.importSession, required this.ledgerPreferences, required this.onImportError, required this.onAddEntriesToLedger, super.key});
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -31,41 +35,50 @@ class _State extends State<ImportScreen> {
         actions: [
           ElevatedButton(
             child: const Text('Add...'),
-            onPressed: () {
+            onPressed: () async {
               final importStarter = ImportStarter();
-              importStarter.startImport(
-                  context,
-                  ledgerPreferences: widget.ledgerPreferences,
-                  accountManager: importSession.accountManager,
-                  ongoingImportSession: importSession
-              ).then((importSession) {
-                if (importSession == null) return;
-                setState((){});
-              });
+              try {
+                final newSession = await importStarter.startImport(
+                    context,
+                    ledgerPreferences: widget.ledgerPreferences,
+                    accountManager: importSession.accountManager,
+                    ongoingImportSession: importSession
+                );
+                if (newSession == null) return;
+                setState(() {});
+              }
+              catch (exc, stackTrace) {
+                widget.onImportError(UserFacingError(message: '$exc', stackTrace: stackTrace));
+              }
             },
           ),
           ElevatedButton(
             child: const Text('Save...'),
-            onPressed: () {
-              ConfirmDialog(context).show(
+            onPressed: () async{
+              final confirm = await ConfirmDialog(context).show(
                 title: 'Save imports',
                 message: '${importSession.summary()}?'
-              ).then((confirmed) {
-                if (confirmed != true) return;
-                importSession.saveTo(widget.ledgerPreferences.defaultLedgerFile).then((placeholder) {
-                  AlertMessageDialog(context).show(
+              );
+              if (confirm != true) return;
+              try {
+                if (kIsWeb) {
+                  widget.onAddEntriesToLedger(importSession.pendingEntriesAsEntries());
+                }
+                else {
+                  await importSession.saveTo(widget.ledgerPreferences.defaultLedgerFile);
+                }
+                await AlertMessageDialog(context).show(
                     title: 'Import succeeded',
                     message: ''
-                  ).then((placeholder) {
-                    Navigator.of(context).pop();
-                  });
-                }).onError((error, stackTrace) {
-                  AlertMessageDialog(context).show(
-                    title: 'Oops',
-                    message: 'Error importing entries: $error\n$stackTrace'
-                  );
-                });
-              });
+                );
+                Navigator.of(context).pop();
+              }
+              catch (error, stackTrace) {
+                AlertMessageDialog(context).show(
+                  title: 'Oops',
+                  message: 'Error importing entries: $error\n$stackTrace'
+                );
+              }
             },
           )
         ],
