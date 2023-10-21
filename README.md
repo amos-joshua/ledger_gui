@@ -12,10 +12,13 @@ A web version is available as a demo: https://amos-joshua.github.io/ledger_gui_w
 This version is entirely self-contained and runs purely on the clientside (there is no backend, no 
 data is sent off the device). The preferences file is stored in client-local storage.
 
+You can use the sample preferences, ledger and csv import from the
+[samples](samples) directory to test the app.
+
 ## Usage
 
-On first run of the app, select a preferences file (see [ledger-preferences.json.sample](ledger-preferences.json.sample)).
-Then (if necessary) select a ledger file.
+On first run of the app, select a preferences file (see [samples/ledger-preferences.json.sample](samples/ledger-preferences.json.sample)).
+Then (if necessary, e.g. on web) select a ledger file.
 
 ### Preferences
 
