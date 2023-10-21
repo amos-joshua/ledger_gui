@@ -17,7 +17,7 @@ You can use the sample preferences, ledger and csv import from the
 
 ## Usage
 
-On first run of the app, select a preferences file (see [samples/ledger-preferences.json.sample](samples/ledger-preferences.json.sample)).
+On first run of the app, select a preferences file (see [samples/ledger-preferences.json](samples/ledger-preferences.json)).
 Then (if necessary, e.g. on web) select a ledger file.
 
 ### Preferences
