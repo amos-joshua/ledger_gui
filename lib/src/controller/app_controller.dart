@@ -95,6 +95,6 @@ class AppController  {
 
   void addToLedger(Iterable<Entry> newEntries) {
     model.ledger.entries.addAll(newEntries);
-    model.balancesQuery.value = model.balancesQuery.value;
+    model.ledgerNonce.value += 1;
   }
 }

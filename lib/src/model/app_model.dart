@@ -9,6 +9,7 @@ class AppModel {
   var preferences = PreferencesAttr(LedgerPreferences.empty);
 
   var ledgerSource = LedgerSourceAttr(null);
+  var ledgerNonce = LedgerNonceAttr(0);
   var ledger = Ledger();
   var errors = <UserFacingError>[];
 

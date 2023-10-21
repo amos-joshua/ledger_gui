@@ -29,11 +29,13 @@ class _State extends State<EvolutionsTab> {
 
     loadBalances();
     query.addListener(loadBalances);
+    appController.model.ledgerNonce.addListener(loadBalances);
   }
 
   @override
   void dispose() {
     query.removeListener(loadBalances);
+    appController.model.ledgerNonce.removeListener(loadBalances);
     super.dispose();
   }
 

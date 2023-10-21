@@ -29,3 +29,7 @@ class GuiInitStateAttr extends ValueNotifier<GuiInitState> {
 class PreferencesAttr extends ValueNotifier<LedgerPreferences> {
   PreferencesAttr(super.value);
 }
+
+class LedgerNonceAttr extends ValueNotifier<int> {
+  LedgerNonceAttr(super.value);
+}

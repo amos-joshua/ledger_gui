@@ -1,0 +1,117 @@
+account Equity:opening-balances
+
+account Assets:checking
+account Assets:savings
+account Liabilities:mortgage
+
+account Expenses:restaurants             # "FALAFEL", "PIZZA"
+account Expenses:groceries               # "GROCERIES"
+account Expenses:gas                     # "GAS"
+account Expenses:electricity             # "GRID PROVIDERS"
+account Expenses:misc
+
+account Income:job
+
+2023-10-01 * Opening balance
+    Assets:checking                      1000 USD
+    Assets:savings                       314 USD
+    Liabilities:mortgage                -199000 USD
+    Equity:opening-balances
+
+
+2023-10-02 * PIZZA
+    Assets:checking                     -20 USD
+    Expenses:restaurants                 20 USD
+
+2023-10-03 * GROCERIES INC.
+    Assets:checking                     -60 USD
+    Expenses:groceries                   60 USD
+
+2023-10-04 * GAS
+    Assets:checking                     -80 USD
+    Expenses:gas                         80 USD
+
+2023-10-12 * ACME PAYCHECK
+    Assets:checking                      3500 USD
+    Income:job                          -3500 USD
+
+2023-10-17 * MORTGAGE PAYMENT
+    Assets:checking                     -700 USD
+    Liabilities:mortgage                 700 USD
+
+2023-10-22 * GRID PROVIDERS DEBIT
+    Assets:checking                      60 USD
+    Expenses:electricity                -60 USD
+
+2023-10-24 * SUSHI
+    Assets:checking                     -45 USD
+    Expenses:restaurants                 45 USD
+
+2023-10-28 * BANK TRANSFER
+    Assets:checking                     -50 USD
+    Assets:savings                       50 USD
+    
+2023-11-02 * GROCERIES INC.
+    Assets:checking                     -90 USD
+    Expenses:groceries                   90 USD
+
+2023-11-03 * GAS
+    Assets:checking                     -60 USD
+    Expenses:gas                         60 USD
+
+2023-11-04 * BEST BURGERS 
+    Assets:checking                     -35 USD
+    Expenses:restaurants                 35 USD
+
+2023-11-12 * ACME PAYCHECK
+    Assets:checking                      3500 USD
+    Income:job                          -3500 USD
+
+2023-11-17 * MORTGAGE PAYMENT
+    Assets:checking                     -700 USD
+    Liabilities:mortgage                 700 USD
+
+2023-11-22 * GRID PROVIDERS DEBIT
+    Assets:checking                      60 USD
+    Expenses:electricity                -60 USD
+
+2023-11-27 * THE FALAFEL JOINT
+    Assets:checking                     -25 USD
+    Expenses:restaurants                 25 USD
+
+2023-11-28 * BANK TRANSFER
+    Assets:checking                     -50 USD
+    Assets:savings                       50 USD
+    
+2023-12-01 * SUSHI
+    Assets:checking                     -65 USD
+    Expenses:restaurants                 65 USD
+
+2023-12-05 * GAS
+    Assets:checking                     -70 USD
+    Expenses:gas                         70 USD
+
+2023-12-04 * GROCERIES INC. 
+    Assets:checking                     -50 USD
+    Expenses:groceries                   50 USD
+
+2023-12-12 * ACME PAYCHECK
+    Assets:checking                      3500 USD
+    Income:job                          -3500 USD
+
+2023-12-17 * MORTGAGE PAYMENT
+    Assets:checking                     -700 USD
+    Liabilities:mortgage                 700 USD
+
+2023-12-22 * GRID PROVIDERS DEBIT
+    Assets:checking                      60 USD
+    Expenses:electricity                -60 USD
+
+2023-12-28 * BANK TRANSFER
+    Assets:checking                     -50 USD
+    Assets:savings                       50 USD
+    
+2023-12-29 * GAS
+    Assets:checking                     -20 USD
+    Expenses:gas                         20 USD
+

@@ -25,6 +25,8 @@ class _State extends State<BalanceTab> {
     ledger = context.read<AppModel>().ledger;
     query = context.read<BalancesQueryAttr>();
     appController = context.read<AppController>();
+    query.addListener(loadBalances);
+    appController.model.ledgerNonce.addListener(loadBalances);
     loadBalances();
   }
 
@@ -38,13 +40,12 @@ class _State extends State<BalanceTab> {
     catch (error, stackTrace) {
       print("Query error: $error \n$stackTrace");
     }
-
-    query.addListener(loadBalances);
   }
 
   @override
   void dispose() {
     query.removeListener(loadBalances);
+    appController.model.ledgerNonce.removeListener(loadBalances);
     super.dispose();
   }
 
