@@ -1,0 +1,27 @@
+{
+  "defaultLedgerFile": "",
+  "defaultCsvImportDirectory": "csv-files/",
+  "importAccounts": [
+    {
+      "label": "Bank of America - checking",
+      "sourceAccount": "Assets:checking",
+      "currency": "USD",
+      "format": "bank-of-america",
+      "defaultDestinationAccount": "Expenses:misc"
+    }
+  ],
+  "csvFormats": [
+    {
+      "name": "bank-of-america",
+      "dateColumnIndex": 0,
+      "descriptionColumnIndex": 1,
+      "amountColumnIndex": 2,
+      "dateFormat": "mm/dd/y",
+      "numberFormat": "###.##",
+      "locale": "en_US",
+      "lineSkip": 8,
+      "valueSeparator": ",",
+      "quoteCharacter": ""
+    }
+  ]
+}
