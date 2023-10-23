@@ -5,6 +5,8 @@ importing CSV bank statements.
 
 Targets the desktop, but should run on mobile / web as well.
 
+![Screenshot](screenshots/composite-balances-import.jpeg?raw=true "Ledger GUI screenshots")
+
 ## Web demo
 
 A web version is available as a demo: https://amos-joshua.github.io/ledger_gui_website/

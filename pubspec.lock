@@ -148,18 +148,18 @@ packages:
     dependency: "direct main"
     description:
       name: ledger_cli
-      sha256: "063a135957fc9e998875fa5e229a4445826eaf6a66ac920b1e3aad881f6bb014"
+      sha256: f8499e21dbfacdd957f922d16f5a162c8b6a8d1e5725dd96c77fab44d3d488bf
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   ledger_cli_flutter:
     dependency: "direct main"
     description:
       name: ledger_cli_flutter
-      sha256: "4bd904e21ab6c787b4f92ca2a747e7b5bd9a701f466034ad1d47d70cfb07ada8"
+      sha256: af4ba9dbe620ff402b4010ed6e7034a9aa470b6af9215b9851d67ac748b1ec77
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   lints:
     dependency: transitive
     description:
